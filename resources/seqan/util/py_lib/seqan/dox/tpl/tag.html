@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tag.title|e }}{% endblock %}
+
+{% block content %}
+<h1 data-lang-entity="tag" data-pimped="true">
+  <a href="page_LanguageEntities.html#tag">Tag</a> <span>{{ tag.title|e }}<div>{{ sections.brief(tag) }}</div></span>
+</h1>
+
+{{ sections.top_box(tag) }}
+
+<!-- Template Parameters -->
+{{ sections.tparams_ov(tag) }}
+
+<!--
+ =============================================================================
+  Detailed Description
+ =============================================================================
+-->
+
+{% if tag.internals or tag.deprecation_msgs or tag.warnings or tag.notes or tag.akas or not tag.body.empty %}
+<h2>Detailed Description</h2>
+<div class="docstring">
+  <div class="discussion">
+    <!-- @internal -->
+    {% if tag.internals %}
+    <div class="note internal"><strong>Internal:</strong> <div class='inline'>
+        <p>For internal use only.</p>
+    </div></div>
+    {% endif %}
+
+    <!-- @deprecated -->
+    {% if tag.deprecation_msgs %}
+        {% for msg in tag.deprecation_msgs %}
+        <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @warning -->
+    {% if tag.warnings %}
+        {% for msg in tag.warnings %}
+        <div class="note warning"><strong>Warning:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @note -->
+    {% if tag.notes %}
+        {% for msg in tag.notes %}
+        <div class="note info"><strong>Note:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+         </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @aka -->
+    {% if tag.akas %}
+    <div class="note aka"><strong>Also known as:</strong> <div class='inline'>
+        <p>{{ tag.akas|join(', ') }}</p>
+    </div></div>
+    {% endif %}
+
+    <!-- paragraphs -->
+    {{ sections.body(tag) }}
+  </div>
+</div>
+{% endif %}
+
+<!-- @see -->
+{{ sections.see_also(tag) }}
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(tag, in_comment=True) }}
+
+{% endblock %}

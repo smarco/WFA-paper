@@ -1,0 +1,57 @@
+*************************************************
+* Multiple sequence alignment - SeqAn::T-Coffee *
+* (c) Copyright 2009 by Tobias Rausch           *
+*************************************************
+
+---------------------------------------------------------------------------
+Table of Contents
+---------------------------------------------------------------------------
+  1.   Installation
+  2.   Example
+  3.   Contact
+  
+---------------------------------------------------------------------------
+1. Installation
+---------------------------------------------------------------------------
+
+SeqAn::T-Coffee is distributed with SeqAn, http://www.seqan.de. 
+You can build it using the latest snapshot or directly from
+the Github repository.
+
+Snapshot:
+
+  1)  Download the latest snapshot of SeqAn::T-Coffee (http://packages.seqan.de/seqan_tcoffee/)
+  2)  Unzip it to a directory of your choice (e.g. snapshot)
+  3)  cd snapshot/bin
+  4)  ./seqan_tcoffee --help
+
+Git:
+
+  1)  git clone https://github.com/seqan/seqan.git
+  2)  mkdir seqan_build
+  3)  cd seqan_build
+  4)  cmake ../seqan
+  5)  make seqan_tcoffee
+  6)  cd bin
+  7)  ./seqan_tcoffee --help
+
+---------------------------------------------------------------------------
+2. Example
+---------------------------------------------------------------------------
+
+Accurate protein alignment:
+./seqan_tcoffee -s seq.fa
+./seqan_tcoffee -s seq.fa -f msf
+
+Fast protein alignment:
+./seqan_tcoffee -s seq.fa -m local
+
+DNA alignment:
+./seqan_tcoffee -s seq.fa -a dna
+
+---------------------------------------------------------------------------
+3. Contact
+---------------------------------------------------------------------------
+
+For questions or comments contact:
+  Tobias Rausch <rausch@inf.fu-berlin.de>

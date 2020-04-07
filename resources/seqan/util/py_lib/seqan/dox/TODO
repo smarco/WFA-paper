@@ -1,0 +1,16 @@
+TODOs
+-----
+
+ * warn about missing return types etc.
+ * generated tokens could have annotation, generated text should have its own type
+
+ * dot inheritance diagrams
+ * Class/Concept/etc. overview pages
+ * frameset structure generation
+ * Do we need modules?
+
+ * imbalanced @code/@endlink causes quiet suppression
+
+ * Create a documentation checklist:
+  * each top level item (class, global function, global metafucntion etc) must have a @headerfile set.
+  * all global interface functions for a type must be implemented in the same header/module.

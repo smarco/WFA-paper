@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ klass.title|e }}{% endblock %}
+
+{% block content %}
+{% if klass.isSpecialization %}
+<h1 data-lang-entity="class" data-pimped="true"><a href="page_LanguageEntities.html#specialization">Spec</a>
+{% else %}
+<h1 data-lang-entity="class" data-pimped="true"><a href="page_LanguageEntities.html#class">Class</a>
+{% endif -%}
+  <span>{{ klass.title|e }}<div>{{ sections.brief(klass) }}</div></span>
+</h1>
+
+{{ sections.top_box(klass) }}
+
+<!-- Template Parameters -->
+{{ sections.tparams_ov(klass) }}
+
+
+<!--
+ =============================================================================
+  Member and Interface Overview
+ =============================================================================
+-->
+
+<!-- Member Functions Overview -->
+{{ sections.member_functions_ov(klass, doc) }}
+
+<!-- Interface Functions Overview -->
+{{ sections.interface_functions_ov(klass, doc) }}
+
+<!-- Member Typedefs Overview -->
+{{ sections.member_typedefs_ov(klass, doc) }}
+
+<!-- Interface Metafunctions Overview -->
+{{ sections.interface_metafunctions_ov(klass, doc) }}
+
+<!-- Member Variable Overview -->
+{{ sections.member_variables_ov(klass, doc) }}
+
+<!--
+ =============================================================================
+  Detailed Description
+ =============================================================================
+-->
+
+{% if klass.internals or klass.deprecation_msgs or klass.warnings or klass.notes or klass.akas or not klass.body.empty %}
+<h2>Detailed Description</h2>
+<div class="docstring">
+  <div class="discussion">
+    <!-- @internal -->
+    {% if klass.internals %}
+    <div class="note internal"><strong>Internal:</strong> <div class='inline'>
+        <p>For internal use only.</p>
+    </div></div>
+    {% endif %}
+
+    <!-- @deprecated -->
+    {% if klass.deprecation_msgs %}
+        {% for msg in klass.deprecation_msgs %}
+        <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @warning -->
+    {% if klass.warnings %}
+        {% for msg in klass.warnings %}
+        <div class="note warning"><strong>Warning:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @note -->
+    {% if klass.notes %}
+        {% for msg in klass.notes %}
+        <div class="note info"><strong>Note:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+         </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @aka -->
+    {% if klass.akas %}
+    <div class="note aka"><strong>Also known as:</strong> <div class='inline'>
+        <p>{{ klass.akas|join(', ') }}</p>
+    </div></div>
+    {% endif %}
+
+    <!-- paragraphs -->
+    {{ sections.body(klass) }}
+  </div>
+</div>
+{% endif %}
+
+<!-- @see -->
+{{ sections.see_also(klass) }}
+
+<!--
+ =============================================================================
+  Member and Interface Details
+ =============================================================================
+-->
+
+<!-- Member Functions Details -->
+{{ sections.member_functions(klass) }}
+
+<!-- Interface Functions Details -->
+{{ sections.interface_functions(klass) }}
+
+<!-- Member Typedefs Details -->
+{{ sections.member_typedefs(klass) }}
+
+<!-- Interface Metafunctions Details -->
+{{ sections.interface_metafunctions(klass) }}
+
+<!-- Member Variable Details -->
+{{ sections.member_variables(klass) }}
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(klass, in_comment=True) }}
+
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ variable.title|e }}{% endblock %}
+
+{% block content %}
+<h1 data-lang-entity="variable" data-pimped="true">
+  <a href="page_LanguageEntities.html#variable">Variable</a> <span>{{ variable.title|e }}<div>{{ sections.brief(variable) }}</div></span>
+</h1>
+
+{{ sections.top_box(variable) }}
+
+{% if variable.internals or variable.deprecation_msgs or variable.warnings or variable.notes or variable.akas or not variable.body.empty %}
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <!-- @internal -->
+    {% if variable.internals %}
+    <div class="note internal"><strong>Internal:</strong> <div class='inline'>
+        <p>For internal use only.</p>
+    </div></div>
+    {% endif %}
+
+    <!-- @deprecated -->
+    {% if variable.deprecation_msgs %}
+        {% for msg in variable.deprecation_msgs %}
+        <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @warning -->
+    {% if variable.warnings %}
+        {% for msg in variable.warnings %}
+        <div class="note warning"><strong>Warning:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @note -->
+    {% if variable.notes %}
+        {% for msg in variable.notes %}
+        <div class="note info"><strong>Note:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+         </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @aka -->
+    {% if variable.akas %}
+    <div class="note aka"><strong>Also known as:</strong> <div class='inline'>
+        <p>{{ variable.akas|join(', ') }}</p>
+    </div></div>
+    {% endif %}
+
+    <!-- paragraphs -->
+    {{ sections.body(variable) }}
+  </div>
+</div>
+{% endif %}
+
+<!-- @see -->
+{{ sections.see_also(variable) }}
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(variable, in_comment=True) }}
+
+{% endblock %}

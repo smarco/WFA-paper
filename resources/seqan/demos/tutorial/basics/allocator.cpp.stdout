@@ -1,0 +1,6 @@
+Allocating and clearing 100000 times blocks of size 10 with MultiPool Allocator took [VAR]
+Allocating and clearing 100000 times blocks of size 10 with Standard Allocator took [VAR]
+Allocating and clearing 100000 times blocks of size 100 with MultiPool Allocator took [VAR]
+Allocating and clearing 100000 times blocks of size 100 with Standard Allocator took [VAR]
+Allocating and clearing 100000 times blocks of size 1000 with MultiPool Allocator took [VAR]
+Allocating and clearing 100000 times blocks of size 1000 with Standard Allocator took [VAR]

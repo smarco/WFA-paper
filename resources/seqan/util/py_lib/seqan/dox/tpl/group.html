@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.title|e }}{% endblock %}
+
+{% block content %}
+<h1 data-lang-entity="group" data-pimped="true">
+  <a href="page_LanguageEntities.html#group">Group</a> <span>{{ group.title|e }}
+  <div>{{ sections.brief(group) }}</div></span>
+</h1>
+
+<!--
+ =============================================================================
+  Grouped Overview
+ =============================================================================
+-->
+
+<!-- Grouped Tags Overview -->
+{{ sections.grouped_tags_ov(group, doc, 'Grouped') }}
+
+<!-- Grouped Tags Overview -->
+{{ sections.grouped_macros_ov(group, doc, 'Grouped') }}
+
+<!-- Grouped Functions Overview -->
+{{ sections.interface_functions_ov(group, doc, 'Grouped') }}
+
+<!-- Grouped Metafunctions Overview -->
+{{ sections.interface_metafunctions_ov(group, doc, 'Grouped') }}
+
+<!--
+ =============================================================================
+  Detailed Description
+ =============================================================================
+-->
+
+{% if group.internals or group.deprecation_msgs or group.warnings or group.notes or group.akas or not group.body.empty %}
+<h2>Detailed Description</h2>
+<div class="docstring">
+  <div class="discussion">
+    <!-- @internal -->
+    {% if group.internals %}
+    <div class="note internal"><strong>Internal:</strong> <div class='inline'>
+        <p>For internal use only.</p>
+    </div></div>
+    {% endif %}
+
+    <!-- @deprecated -->
+    {% if group.deprecation_msgs %}
+        {% for msg in group.deprecation_msgs %}
+        <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @warning -->
+    {% if group.warnings %}
+        {% for msg in group.warnings %}
+        <div class="note warning"><strong>Warning:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @note -->
+    {% if group.notes %}
+        {% for msg in group.notes %}
+        <div class="note info"><strong>Note:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+         </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @aka -->
+    {% if group.akas %}
+    <div class="note aka"><strong>Also known as:</strong> <div class='inline'>
+        <p>{{ group.akas|join(', ') }}</p>
+    </div></div>
+    {% endif %}
+
+    <!-- paragraphs -->
+    {{ sections.body(group) }}
+  </div>
+</div>
+
+{% endif %}
+
+<!-- @see -->
+{{ sections.see_also(group) }}
+
+<!--
+ =============================================================================
+  Grouped Details
+ =============================================================================
+-->
+
+<!-- Grouped Tags Details -->
+{{ sections.grouped_tags(group, 'Grouped') }}
+
+<!-- Grouped macros Details -->
+{{ sections.grouped_macros(group, 'Grouped') }}
+
+<!-- Grouped Functions Details -->
+{{ sections.interface_functions(group, 'Grouped') }}
+
+<!-- Grouped Metafunctions Details -->
+{{ sections.interface_metafunctions(group, 'Grouped') }}
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(group, in_comment=True) }}
+
+{% endblock %}

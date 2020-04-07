@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{ function.title|e }}{% endblock %}
+
+{% block content %}
+<h1 data-lang-entity="function" data-pimped="true">
+  <a href="page_LanguageEntities.html#function">fn()</a> <span>{{ function.title|e }}<div>{{ sections.brief(function) }}</div></span>
+</h1>
+
+{{ sections.top_box(function) }}
+
+<!-- @param -->
+{{ sections.params(function) }}
+
+<!-- @tparam -->
+{{ sections.tparams(function) }}
+
+<!-- @returns -->
+{{ sections.return_values(function) }}
+
+<!--
+ =============================================================================
+  Detailed Description
+ =============================================================================
+-->
+
+{% if function.internals or function.deprecation_msgs or function.warnings or function.notes or function.akas or not function.body.empty %}
+<h2>Detailed Description</h2>
+<div class="docstring">
+  <div class="discussion">
+    <!-- @internal -->
+    {% if function.internals %}
+    <div class="note internal"><strong>Internal:</strong> <div class='inline'>
+        <p>For internal use only.</p>
+    </div></div>
+    {% endif %}
+
+    <!-- @deprecated -->
+    {% if function.deprecation_msgs %}
+        {% for msg in function.deprecation_msgs %}
+        <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @warning -->
+    {% if function.warnings %}
+        {% for msg in function.warnings %}
+        <div class="note warning"><strong>Warning:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+        </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @note -->
+    {% if function.notes %}
+        {% for msg in function.notes %}
+        <div class="note info"><strong>Note:</strong> <div class='inline'>
+            <p>{{ msg|transtext(False) }}</p>
+         </div></div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- @aka -->
+    {% if function.akas %}
+    <div class="note aka"><strong>Also known as:</strong> <div class='inline'>
+        <p>{{ function.akas|join(', ') }}</p>
+    </div></div>
+    {% endif %}
+
+    <!-- paragraphs -->
+    {{ sections.body(function) }}
+  </div>
+</div>
+{% endif %}
+
+<!-- @throw -->
+{{ sections.throws(function) }}
+
+<!-- @datarace -->
+{{ sections.dataraces(function) }}
+
+<!-- @see -->
+{{ sections.see_also(function) }}
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(function, in_comment=True) }}
+
+{% endblock %}

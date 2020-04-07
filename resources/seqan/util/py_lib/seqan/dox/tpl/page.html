@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title|e }}{% endblock %}
+
+{% block content %}
+<div id="filecontents">
+<h1 data-lang-entity="page" data-pimped="true">
+  <a href="page_LanguageEntities.html#page">Page</a> <span>{{ page.title|e }}</span>
+</h1>
+
+<div class="docstring">
+  <div class="discussion">
+    <!-- @brief -->
+    {{ sections.brief(page) }}
+    
+    <!-- paragraphs -->
+    {{ sections.body(page, start_heading=2) }}
+  </div>
+</div>
+
+<!-- @see -->
+{{ sections.see_also(page) }}
+</div>
+
+<!--
+ =============================================================================
+  Footer / Debug
+ =============================================================================
+-->
+
+{{ sections.dox_source(page) }}
+
+{% endblock %}
