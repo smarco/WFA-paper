@@ -190,7 +190,7 @@ of 5M pairs of 100 bases with an alignment error of 5% (i.e., 5 mismatches, inse
 per alignment).
 
 ```
-$> ./bin/generate_datasets -n 5000000 -l 100 -e 0.05 -o sample.dataset.seq
+$> ./bin/generate_dataset -n 5000000 -l 100 -e 0.05 -o sample.dataset.seq
 ```
 
 Once you have the dataset ready, you can run the *align-benchmark* tool to benchmark the performance 
