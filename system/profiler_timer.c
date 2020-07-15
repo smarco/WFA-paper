@@ -31,6 +31,12 @@
 
 #include "profiler_timer.h"
 
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#endif
+
 /*
  * System timer
  */
