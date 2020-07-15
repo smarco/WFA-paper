@@ -31,7 +31,7 @@ debug: setup
 debug: MODE=all
 debug: $(SUBDIRS) tools $(LIB_WFA)
 
-$(LIB_WFA):
+$(LIB_WFA): $(FOLDER_BUILD)/*.o
 	$(AR) -rcs $(LIB_WFA) $(FOLDER_BUILD)/*.o
 
 setup:
