@@ -463,10 +463,10 @@ void mm_allocator_print_state(
 //  }
   // Display State
 #ifdef MM_ALLOCATOR_LOG
-  fprintf(stream,"  [%02lu] \t Requests=%04lu \t Allocated=%08uB \t %s:%lu\n",
+  fprintf(stream,"  [%02lu] \t Requests=%04" PRIu64 " \t Allocated=%08uB \t %s:%" PRIu64 "\n",
       mm_allocator_state_id,(uint64_t)0,0,mm_allocator_state->func_name,mm_allocator_state->line_no);
 #else
-  fprintf(stream,"  [%02lu] \t Requests=%04lu \t Allocated=%08uB\n",
+  fprintf(stream,"  [%02" PRIu64 "] \t Requests=%04" PRIu64 " \t Allocated=%08uB\n",
       mm_allocator_state_id,(uint64_t)0,0);
 #endif
 }
@@ -492,12 +492,12 @@ void mm_allocator_print_request(
     mm_allocator_request_t* const request,
     const uint64_t request_id) {
 #ifdef MM_ALLOCATOR_LOG
-      fprintf(stream,"    [%03lu:%s \t @%lu/%08u \t Size=%luB \t %s:%lu\n",
+      fprintf(stream,"    [%03" PRIu64 ":%s \t @%" PRIu64 "/%08u \t Size=%" PRIu64 "B \t %s:%" PRIu64 "\n",
           request_id,MM_ALLOCATOR_REQUEST_IS_FREE(request) ? "Free]     " : "Allocated]",
           segment_idx,request->offset,MM_ALLOCATOR_REQUEST_SIZE(request),
           request->func_name,request->line_no);
 #else
-      fprintf(stream,"    [%03lu:%s \t @%lu/%08u \t Size=%luB\n",
+      fprintf(stream,"    [%03" PRIu64 ":%s \t @%" PRIu64 "/%08u \t Size=%" PRIu64 "B\n",
           request_id,MM_ALLOCATOR_REQUEST_IS_FREE(request) ? "Free]     " : "Allocated]",
           segment_idx,request->offset,MM_ALLOCATOR_REQUEST_SIZE(request));
 #endif
@@ -520,7 +520,7 @@ void mm_allocator_print_requests(
           free_block += MM_ALLOCATOR_REQUEST_SIZE(request);
         } else {
           if (free_block > 0) {
-            fprintf(stream,"    [n/a:Free]      \t Size=%luB\n",free_block);
+            fprintf(stream,"    [n/a:Free]      \t Size=%" PRIu64 "B\n",free_block);
             free_block = 0;
           }
           mm_allocator_print_request(stream,segment_idx,request,global_request_idx);
@@ -543,16 +543,16 @@ void mm_allocator_print(
   // Print segment information
   const uint64_t num_segments = mm_allocator_get_num_segments(mm_allocator);
   const uint64_t segment_size = mm_allocator_get_segment(mm_allocator,0)->segment_size;
-  fprintf(stream,"  => Segments.allocated %lu\n",num_segments);
-  fprintf(stream,"    => Segments.size %lu MB\n",CONVERT_B_TO_MB(segment_size));
-  fprintf(stream,"    => Memory.available %lu MB\n",num_segments*CONVERT_B_TO_MB(segment_size));
+  fprintf(stream,"  => Segments.allocated %" PRIu64 "\n",num_segments);
+  fprintf(stream,"    => Segments.size %" PRIu64 " MB\n",CONVERT_B_TO_MB(segment_size));
+  fprintf(stream,"    => Memory.available %" PRIu64 " MB\n",num_segments*CONVERT_B_TO_MB(segment_size));
   // Print memory information
   uint64_t total_used, total_free, begin_free;
   mm_allocator_compute_occupation(mm_allocator,&total_used,&total_free,&begin_free);
-  fprintf(stream,"  => Memory.used %lu\n",total_used);
-  fprintf(stream,"  => Memory.free %lu\n",total_free);
-  fprintf(stream,"    => Memory.free.begin %lu\n",begin_free);
-  fprintf(stream,"    => Memory.free.fragmented %lu\n",total_free-begin_free);
+  fprintf(stream,"  => Memory.used %" PRIu64 "\n",total_used);
+  fprintf(stream,"  => Memory.free %" PRIu64 "\n",total_free);
+  fprintf(stream,"    => Memory.free.begin %" PRIu64 "\n",begin_free);
+  fprintf(stream,"    => Memory.free.fragmented %" PRIu64 "\n",total_free-begin_free);
   // Print pushed states
   mm_allocator_print_states(stream,mm_allocator);
   // Print memory requests

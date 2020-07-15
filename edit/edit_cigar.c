@@ -100,7 +100,7 @@ void edit_cigar_add_mismatches(
   edit_cigar->end_offset = i;
   edit_cigar->operations[edit_cigar->end_offset] = '\0';
   //  // DEBUG
-  //  printf("Score=%ld\nPath-length=%lu\nCIGAR=%s\n",
+  //  printf("Score=%ld\nPath-length=%" PRIu64 "\nCIGAR=%s\n",
   //      gaba_alignment->score,gaba_alignment->plen,
   //      edit_cigar->operations);
 }
