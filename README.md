@@ -23,6 +23,8 @@ WFA library, checkout branch `benchmark`.
 
 ### 1.2 Getting started
 
+Note: We recomend using the GCC compiler
+
 Clone GIT and compile
 
 ```
@@ -360,4 +362,4 @@ Please report any issue or suggestion on github, or by email to the main develop
 
 ## 7. LICENSE AND CITATION
 
-WFA is distributed under GPLv3 licence.
+WFA is distributed under MIT licence.

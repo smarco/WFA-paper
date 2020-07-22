@@ -17,8 +17,8 @@ MODULES=affine_penalties \
         affine_wavefront_penalties \
         affine_wavefront_reduction \
         affine_wavefront_utils \
-		swg \
-		wavefront_stats
+        swg \
+        wavefront_stats
 
 SRCS=$(addsuffix .c, $(MODULES))
 OBJS=$(addprefix $(FOLDER_BUILD)/, $(SRCS:.c=.o))

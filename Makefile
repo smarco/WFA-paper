@@ -4,11 +4,19 @@
 FOLDER_BIN=bin
 FOLDER_BUILD=build
 
+UNAME=$(shell uname)
+
 CC=gcc
 CPP=g++
-LD_FLAGS=-lm -lrt
+
+LD_FLAGS=-lm
 CC_FLAGS=-Wall -g
+ifeq ($(UNAME), Linux)
+  LD_FLAGS+=-lrt 
+endif
+
 AR=ar
+AR_FLAGS=-rsc
 
 ###############################################################################
 # Compile rules
@@ -31,8 +39,8 @@ debug: setup
 debug: MODE=all
 debug: $(SUBDIRS) tools $(LIB_WFA)
 
-$(LIB_WFA): $(FOLDER_BUILD)/*.o
-	$(AR) -rcs $(LIB_WFA) $(FOLDER_BUILD)/*.o
+$(LIB_WFA): .FORCE
+	$(AR) $(AR_FLAGS) $(LIB_WFA) $(FOLDER_BUILD)/*.o 2> /dev/null
 
 setup:
 	@mkdir -p $(FOLDER_BIN) $(FOLDER_BUILD)
@@ -59,4 +67,5 @@ tools:
 	$(MAKE) --directory=$@ $(MODE)
 
 .PHONY: $(SUBDIRS) tools
+.FORCE:
 

@@ -156,7 +156,13 @@ void affine_wavefronts_compute_offsets_idm(
     out_moffsets[k] = MAX(del,MAX(sub,ins));
   }
   // Compute score wavefronts (core)
+#if defined(__clang__)
+  #pragma clang loop vectorize(enable)
+#elif defined(__GNUC__) || defined(__GNUG__)
   #pragma GCC ivdep
+#else
+  #pragma ivdep
+#endif
   for (k=max_lo;k<=min_hi;++k) {
     // Update I
     const awf_offset_t m_gapi_value = m_gap_offsets[k-1];
@@ -202,7 +208,11 @@ void affine_wavefronts_compute_offsets_im(
   awf_offset_t* const out_moffsets = wavefront_set->out_mwavefront->offsets;
   // Compute score wavefronts
   int k;
+#if defined(__GNUC__) || defined(__GNUG__)
   #pragma GCC ivdep
+#else
+  #pragma ivdep
+#endif
   for (k=lo;k<=hi;++k) {
     // Update I
     const awf_offset_t ins_g = AFFINE_WAVEFRONT_COND_FETCH(m_gap,k-1,m_gap_offsets[k-1]);
@@ -227,7 +237,11 @@ void affine_wavefronts_compute_offsets_dm(
   awf_offset_t* const out_moffsets = wavefront_set->out_mwavefront->offsets;
   // Compute score wavefronts
   int k;
+#if defined(__GNUC__) || defined(__GNUG__)
   #pragma GCC ivdep
+#else
+  #pragma ivdep
+#endif
   for (k=lo;k<=hi;++k) {
     // Update D
     const awf_offset_t del_g = AFFINE_WAVEFRONT_COND_FETCH(m_gap,k+1,m_gap_offsets[k+1]);
@@ -249,7 +263,11 @@ void affine_wavefronts_compute_offsets_m(
   awf_offset_t* const out_moffsets = wavefront_set->out_mwavefront->offsets;
   // Compute score wavefronts
   int k;
+#if defined(__GNUC__) || defined(__GNUG__)
   #pragma GCC ivdep
+#else
+  #pragma ivdep
+#endif
   for (k=lo;k<=hi;++k) {
     // Update M
     out_moffsets[k] = AFFINE_WAVEFRONT_COND_FETCH(m_sub,k,m_sub_offsets[k]+1);
