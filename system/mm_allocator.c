@@ -494,12 +494,12 @@ void mm_allocator_print_request(
 #ifdef MM_ALLOCATOR_LOG
       fprintf(stream,"    [%03" PRIu64 ":%s \t @%" PRIu64 "/%08u \t Size=%" PRIu64 "B \t %s:%" PRIu64 "\n",
           request_id,MM_ALLOCATOR_REQUEST_IS_FREE(request) ? "Free]     " : "Allocated]",
-          segment_idx,request->offset,MM_ALLOCATOR_REQUEST_SIZE(request),
+          segment_idx,request->offset,(uint64_t)MM_ALLOCATOR_REQUEST_SIZE(request),
           request->func_name,request->line_no);
 #else
       fprintf(stream,"    [%03" PRIu64 ":%s \t @%" PRIu64 "/%08u \t Size=%" PRIu64 "B\n",
           request_id,MM_ALLOCATOR_REQUEST_IS_FREE(request) ? "Free]     " : "Allocated]",
-          segment_idx,request->offset,MM_ALLOCATOR_REQUEST_SIZE(request));
+          segment_idx,request->offset,(uint64_t)MM_ALLOCATOR_REQUEST_SIZE(request));
 #endif
 }
 void mm_allocator_print_requests(
