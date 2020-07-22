@@ -23,6 +23,8 @@ WFA library, checkout branch `benchmark`.
 
 ### 1.2 Getting started
 
+Note: We recomend using the GCC compiler
+
 Clone GIT and compile
 
 ```

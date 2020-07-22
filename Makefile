@@ -6,11 +6,8 @@ FOLDER_BUILD=build
 
 UNAME=$(shell uname)
 
-#CC=gcc
-#CPP=g++
-
-CC=clang
-CPP=clang
+CC=gcc
+CPP=g++
 
 LD_FLAGS=-lm
 CC_FLAGS=-Wall -g
