@@ -65,6 +65,8 @@ void edit_cigar_allocate(
     const int pattern_length,
     const int text_length,
     mm_allocator_t* const mm_allocator);
+void edit_cigar_clear(
+    edit_cigar_t* const edit_cigar);
 void edit_cigar_free(
     edit_cigar_t* const edit_cigar,
     mm_allocator_t* const mm_allocator);
