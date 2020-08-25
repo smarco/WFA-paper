@@ -150,6 +150,8 @@ void affine_wavefronts_clear(
       dwavefronts[i] = NULL;
     }
   }
+  // Clear CIGAR
+  edit_cigar_clear(&affine_wavefronts->edit_cigar);
   // Clear bulk memory
   affine_wavefronts->wavefronts_current = affine_wavefronts->wavefronts_mem;
 }

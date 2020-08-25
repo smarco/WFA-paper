@@ -8,4 +8,5 @@ fi
 
 # Compile examples
 gcc -O3 -I../.. -L../../build wfa_basic.c -o wfa_basic -lwfa
+gcc -O3 -I../.. -L../../build wfa_repeated.c -o wfa_repeated -lwfa
 gcc -O3 -I../.. -L../../build wfa_adapt.c -o wfa_adapt -lwfa
