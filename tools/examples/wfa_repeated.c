@@ -59,7 +59,7 @@ int main(int argc,char* argv[]) {
     if ((i%1000) == 0) {
       const int score = edit_cigar_score_gap_affine(
           &affine_wavefronts->edit_cigar,&affine_penalties);
-      fprintf(stderr,"Done %d, score if %d\n",i,score);
+      fprintf(stderr,"Done %d, score is %d\n",i,score);
     }
   }
   // Free
