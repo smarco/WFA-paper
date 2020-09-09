@@ -46,7 +46,7 @@ int main(int argc,char* argv[]) {
   };
   // Init Affine-WFA
   affine_wavefronts_t* affine_wavefronts = affine_wavefronts_new_complete(
-      strlen(pattern),strlen(text),&affine_penalties,NULL,mm_allocator);
+      strlen(pattern),strlen(pattern),&affine_penalties,NULL,mm_allocator);
   // Repeat alignment (for the sake of it)
   int i;
   for (i=0;i<100000;++i) {

@@ -48,7 +48,7 @@ int main(int argc,char* argv[]) {
   const int max_distance_threshold = 50;
   // Init Affine-WFA
   affine_wavefronts_t* affine_wavefronts = affine_wavefronts_new_reduced(
-      strlen(pattern),strlen(text),&affine_penalties,
+      strlen(pattern),strlen(pattern),&affine_penalties,
       min_wavefront_length,max_distance_threshold,NULL,mm_allocator);
   // Align
   affine_wavefronts_align(
