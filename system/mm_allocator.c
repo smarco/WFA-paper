@@ -107,7 +107,6 @@ mm_allocator_segment_t* mm_allocator_segment_new(
   segment->requests = vector_new(MM_ALLOCATOR_SEGMENT_INITIAL_REQUESTS,mm_allocator_request_t);
   // Add to segments
   vector_insert(mm_allocator->segments,segment,mm_allocator_segment_t*);
-  vector_insert(mm_allocator->segments_free,segment,mm_allocator_segment_t*);
   // Return
   return segment;
 }
@@ -155,9 +154,13 @@ void mm_allocator_clear(
     mm_allocator_t* const mm_allocator) {
   // Clear segments
   vector_clear(mm_allocator->segments_free);
-  VECTOR_ITERATE(mm_allocator->segments,segment_ptr,p,mm_allocator_segment_t*) {
-    mm_allocator_segment_clear(*segment_ptr); // Clear segment
-    vector_insert(mm_allocator->segments_free,*segment_ptr,mm_allocator_segment_t*); // Add to free segments
+  const uint64_t num_segments = vector_get_used(mm_allocator->segments);
+  mm_allocator_segment_t** const segments = 
+      vector_get_mem(mm_allocator->segments,mm_allocator_segment_t*);
+  uint64_t i;
+  for (i=1;i<num_segments;++i) {
+    mm_allocator_segment_clear(segments[i]); // Clear segment
+    vector_insert(mm_allocator->segments_free,segments[i],mm_allocator_segment_t*); // Add to free segments
   }
   mm_allocator->current_segment_idx = 0;
   // Clear malloc memory
@@ -215,7 +218,7 @@ mm_allocator_segment_t* mm_allocator_fetch_segment(
   const uint64_t free_segments = vector_get_used(mm_allocator->segments_free);
   if (free_segments > 0) {
     mm_allocator_segment_t* const segment =
-        mm_allocator_get_segment(mm_allocator,free_segments-1);
+        *vector_get_elm(mm_allocator->segments_free,free_segments-1,mm_allocator_segment_t*);
     vector_dec_used(mm_allocator->segments_free);
     mm_allocator->current_segment_idx = segment->segment_idx;
     return segment;
