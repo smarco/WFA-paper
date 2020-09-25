@@ -345,8 +345,10 @@ checkout branch `benchmark`.
 Feedback and bug reporting it's highly appreciated. 
 Please report any issue or suggestion on github, or by email to the main developer (santiagomsola@gmail.com).
 
-## 7. LICENSE AND CITATION
+## 7. LICENSE
 
 WFA is distributed under MIT licence.
+
+## 8. CITATION
 
 **Santiago Marco-Sola, Juan Carlos Moure, Miquel Moreto, Antonio Espinosa**. ["Fast gap-affine pairwise alignment using the wavefront algorithm."](https://doi.org/10.1093/bioinformatics/btaa777) Bioinformatics, 2020.
