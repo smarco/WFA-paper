@@ -348,3 +348,5 @@ Please report any issue or suggestion on github, or by email to the main develop
 ## 7. LICENSE AND CITATION
 
 WFA is distributed under MIT licence.
+
+**Santiago Marco-Sola, Juan Carlos Moure, Miquel Moreto, Antonio Espinosa**. ["Fast gap-affine pairwise alignment using the wavefront algorithm."](https://doi.org/10.1093/bioinformatics/btaa777) Bioinformatics, 2020.
