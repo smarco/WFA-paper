@@ -35,11 +35,13 @@ all: MODE=all
 all: setup
 all: $(SUBDIRS) tools $(LIB_WFA)
 
+$(FOLDER_BUILD)/*.o: $(SUBDIRS)
+
 debug: setup
 debug: MODE=all
 debug: $(SUBDIRS) tools $(LIB_WFA)
 
-$(LIB_WFA): .FORCE
+$(LIB_WFA): $(FOLDER_BUILD)/*.o
 	$(AR) $(AR_FLAGS) $(LIB_WFA) $(FOLDER_BUILD)/*.o 2> /dev/null
 
 setup:
