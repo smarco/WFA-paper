@@ -45,4 +45,12 @@ void affine_wavefronts_align(
     const char* const text,
     const int text_length);
 
+void affine_wavefronts_align_bounded(
+    affine_wavefronts_t* const affine_wavefronts,
+    const char* const pattern,
+    const int pattern_length,
+    const char* const text,
+    const int text_length,
+    const int max_score);
+
 #endif /* AFFINE_WAVEFRONT_ALIGN_H_ */
