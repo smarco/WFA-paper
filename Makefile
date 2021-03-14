@@ -47,7 +47,6 @@ setup:
 lib_wfa: $(SUBDIRS)
 	$(AR) $(AR_FLAGS) $(LIB_WFA) $(FOLDER_BUILD)/*.o 2> /dev/null
 
-OBJS     :=  $(wildcard $(FOLDER_BUILD)/*.o)
 lib_wfa_so: LDFLAGS += -shared -L.
 lib_wfa_so: $(SUBDIRS)
 	$(CC) $(LDFLAGS)  $(FOLDER_BUILD)/*.o -o $(LIB_WFA_SO) 
