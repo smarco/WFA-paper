@@ -48,7 +48,7 @@ void strings_padded_add_padding(
     mm_allocator_t* const mm_allocator) {
   // Allocate
   const int buffer_padded_length = begin_padding_length + buffer_length + end_padding_length;
-  *buffer_padded = mm_allocator_malloc(mm_allocator,buffer_padded_length,char);
+  *buffer_padded = wfa_mm_allocator_malloc(mm_allocator,buffer_padded_length,char);
   // Add begin padding
   memset(*buffer_padded,padding_value,begin_padding_length);
   // Copy buffer

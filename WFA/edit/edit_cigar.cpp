@@ -42,7 +42,7 @@ void edit_cigar_allocate(
     const int text_length,
     mm_allocator_t* const mm_allocator) {
   edit_cigar->max_operations = pattern_length+text_length;
-  edit_cigar->operations = mm_allocator_malloc(mm_allocator,edit_cigar->max_operations,char);
+  edit_cigar->operations = wfa_mm_allocator_malloc(mm_allocator,edit_cigar->max_operations,char);
   edit_cigar->begin_offset = edit_cigar->max_operations - 1;
   edit_cigar->end_offset = edit_cigar->max_operations;
   edit_cigar->score = INT32_MIN;

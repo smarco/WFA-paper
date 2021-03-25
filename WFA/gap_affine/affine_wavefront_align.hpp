@@ -39,14 +39,14 @@ namespace wfa {
 /*
  * Computation using Wavefronts
  */
-void affine_wavefronts_align(
+int affine_wavefronts_align(
     affine_wavefronts_t* const affine_wavefronts,
     const char* const pattern,
     const int pattern_length,
     const char* const text,
     const int text_length);
 
-void affine_wavefronts_align_bounded(
+int affine_wavefronts_align_bounded(
     affine_wavefronts_t* const affine_wavefronts,
     const char* const pattern,
     const int pattern_length,

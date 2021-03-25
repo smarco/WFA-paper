@@ -47,7 +47,7 @@ void affine_table_allocate(
   table->num_rows = pattern_length+1;
   const int num_columns = text_length+1;
   table->num_columns = num_columns;
-  table->columns = mm_allocator_malloc(mm_allocator,(text_length+1)*sizeof(affine_cell_t*),affine_cell_t*); // Columns
+  table->columns = wfa_mm_allocator_malloc(mm_allocator,(text_length+1)*sizeof(affine_cell_t*),affine_cell_t*); // Columns
   for (h=0;h<num_columns;++h) {
     table->columns[h] = mm_allocator_calloc(mm_allocator,pattern_length+1,affine_cell_t,false); // Rows
   }
