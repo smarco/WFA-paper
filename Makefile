@@ -24,13 +24,13 @@ AR_FLAGS=-rsc
 ###############################################################################
 
 LIB_WFA=$(FOLDER_BUILD)/libwfa.a
+LIB_WFA_SO=$(FOLDER_BUILD)/libwfa.so
 
-all: CC_FLAGS+=-O3
+
+all: CC_FLAGS+=-O3 -fPIC
 all: MODE=all
 all: setup
-all: lib_wfa
-
-$(FOLDER_BUILD): setup
+all: $(SUBDIRS) lib_wfa lib_wfa_so tools
 
 debug: setup
 debug: MODE=all
@@ -154,6 +154,11 @@ setup:
 
 lib_wfa: $(OBJS)
 	$(AR) $(AR_FLAGS) $(LIB_WFA) $(FOLDER_BUILD)/*.o 2> /dev/null
+
+lib_wfa_so: LDFLAGS += -shared -L.
+lib_wfa_so: $(SUBDIRS)
+	$(CC) $(LDFLAGS)  $(FOLDER_BUILD)/*.o -o $(LIB_WFA_SO) 
+
 
 clean:
 	rm -rf $(FOLDER_BIN) $(FOLDER_BUILD)
