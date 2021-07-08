@@ -10,7 +10,7 @@ CC=gcc
 CPP=g++
 
 LD_FLAGS=-lm
-CC_FLAGS=-Wall -g
+CC_FLAGS=-Wall -g -fPIC
 ifeq ($(UNAME), Linux)
   LD_FLAGS+=-lrt 
 endif
@@ -31,14 +31,13 @@ SUBDIRS=benchmark \
 LIB_WFA=$(FOLDER_BUILD)/libwfa.a
 LIB_WFA_SO=$(FOLDER_BUILD)/libwfa.so
 
-
-all: CC_FLAGS+=-O3 -fPIC
+all: CC_FLAGS+=-O3
 all: MODE=all
 all: setup
 all: $(SUBDIRS) lib_wfa lib_wfa_so tools
 
-debug: setup
 debug: MODE=all
+debug: setup
 debug: $(SUBDIRS) lib_wfa tools
 
 setup:
@@ -47,10 +46,9 @@ setup:
 lib_wfa: $(SUBDIRS)
 	$(AR) $(AR_FLAGS) $(LIB_WFA) $(FOLDER_BUILD)/*.o 2> /dev/null
 
-lib_wfa_so: LDFLAGS += -shared -L.
+lib_wfa_so: LDFLAGS+=-shared -L.
 lib_wfa_so: $(SUBDIRS)
 	$(CC) $(LDFLAGS)  $(FOLDER_BUILD)/*.o -o $(LIB_WFA_SO) 
-
 
 clean:
 	rm -rf $(FOLDER_BIN) $(FOLDER_BUILD)

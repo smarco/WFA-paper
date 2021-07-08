@@ -70,7 +70,7 @@ void benchmark_check_alignment(
       affine_table_allocate(
           &affine_table,align_input->pattern_length,
           align_input->text_length,align_input->mm_allocator);
-      if (align_input->check_bandwidth < 0) {
+      if (align_input->check_bandwidth <= 0) {
         swg_compute(&affine_table,align_input->check_affine_penalties,
             align_input->pattern,align_input->pattern_length,
             align_input->text,align_input->text_length);
@@ -114,7 +114,7 @@ void benchmark_check_alignment(
       edit_table_allocate(
           &edit_table,align_input->pattern_length,
           align_input->text_length,align_input->mm_allocator);
-      if (align_input->check_bandwidth < 0) {
+      if (align_input->check_bandwidth <= 0) {
         edit_dp_compute(&edit_table,
             align_input->pattern,align_input->pattern_length,
             align_input->text,align_input->text_length);

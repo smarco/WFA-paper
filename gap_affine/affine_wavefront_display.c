@@ -81,177 +81,84 @@ void affine_wavefronts_set_edit_table(
   } else { \
     fprintf(stream,"    "); \
   }
-void affine_wavefronts_print_wavefront(
+void affine_wavefronts_print_wavefronts_block(
     FILE* const stream,
     affine_wavefronts_t* const affine_wavefronts,
-    const int current_score) {
-  // Print header
-  fprintf(stream,">[SCORE=%3d]\n",current_score);
-  if (affine_wavefronts->iwavefronts != NULL) {
-    fprintf(stream," [M] [I] [D] ");
-  } else {
-    fprintf(stream," [M] ");
-  }
-  fprintf(stream,"\n");
+    const int score_begin,
+    const int score_end) {
   // Compute min/max k
-  int k, max_k=0, min_k=0;
-  for (k=affine_wavefronts->max_k;k>=affine_wavefronts->min_k;k--) {
-    // Fetch wavefront
-    affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[current_score];
+  int s, max_k=0, min_k=0;
+  for (s=score_begin;s<=score_end;++s) {
+    affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[s];
     if (mwavefront != NULL) {
       max_k = MAX(max_k,mwavefront->hi);
       min_k = MIN(min_k,mwavefront->lo);
     }
-    if (affine_wavefronts->iwavefronts != NULL) {
-      affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[current_score];
-      affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[current_score];
-      if (iwavefront != NULL) {
-        max_k = MAX(max_k,iwavefront->hi);
-        min_k = MIN(min_k,iwavefront->lo);
-      }
-      if (dwavefront != NULL) {
-        max_k = MAX(max_k,dwavefront->hi);
-        min_k = MIN(min_k,dwavefront->lo);
-      }
+    affine_wavefront_t* const i1wavefront = affine_wavefronts->iwavefronts[s];
+    if (i1wavefront != NULL) {
+      max_k = MAX(max_k,i1wavefront->hi);
+      min_k = MIN(min_k,i1wavefront->lo);
+    }
+    affine_wavefront_t* const d1wavefront = affine_wavefronts->dwavefronts[s];
+    if (d1wavefront != NULL) {
+      max_k = MAX(max_k,d1wavefront->hi);
+      min_k = MIN(min_k,d1wavefront->lo);
     }
   }
-  // Print wavefront values
+  // Headers
+  fprintf(stream,">[SCORE %3d-%3d]\n",score_begin,score_end);
+  fprintf(stream,"         ");
+  for (s=score_begin;s<=score_end;++s) {
+    fprintf(stream,"[ M][I1][I2][D1][D2] ");
+  }
+  fprintf(stream,"\n");
+  fprintf(stream,"        ");
+  for (s=score_begin;s<=score_end;++s) {
+    fprintf(stream,"+--------------------");
+  }
+  fprintf(stream,"\n");
+  // Traverse all diagonals
+  int k;
   for (k=max_k;k>=min_k;k--) {
     fprintf(stream,"[k=%3d] ",k);
-    // Fetch wavefront
-    affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[current_score];
-    if (affine_wavefronts->iwavefronts != NULL) {
-      affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[current_score];
-      affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[current_score];
+    // Traverse all scores
+    for (s=score_begin;s<=score_end;++s) {
+      fprintf(stream,"|");
+      // Fetch wavefront
+      affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[s];
+      affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[s];
+      affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[s];
       AFFINE_WAVEFRONTS_PRINT_ELEMENT(mwavefront,k);
       AFFINE_WAVEFRONTS_PRINT_ELEMENT(iwavefront,k);
+      fprintf(stream,"    ");
       AFFINE_WAVEFRONTS_PRINT_ELEMENT(dwavefront,k);
-    } else {
-      AFFINE_WAVEFRONTS_PRINT_ELEMENT(mwavefront,k);
+      fprintf(stream,"    ");
     }
-    fprintf(stream,"\n");
+    fprintf(stream,"|\n");
   }
+  // Headers
+  fprintf(stream,"        ");
+  for (s=score_begin;s<=score_end;++s) {
+    fprintf(stream,"+--------------------");
+  }
+  fprintf(stream,"\n");
+  fprintf(stream,"SCORE   ");
+  for (s=score_begin;s<=score_end;++s) {
+    fprintf(stream,"          %2d         ",s);
+  }
+  fprintf(stream,"\n");
 }
 void affine_wavefronts_print_wavefronts(
     FILE* const stream,
     affine_wavefronts_t* const affine_wavefronts,
     const int current_score) {
-  // Headers
-  int k, s;
-  fprintf(stream,">[SCORE=%3d]\n",current_score);
-  fprintf(stream,"        ");
-  for (s=0;s<=current_score;++s) {
-    if (affine_wavefronts->iwavefronts != NULL) {
-      fprintf(stream," [M] [I] [D] ");
-    } else {
-      fprintf(stream," [M] ");
-    }
+  // Print wavefronts by chunks
+  const int display_block_wf = 5;
+  int s;
+  for (s=0;s<=current_score;s+=display_block_wf) {
+    affine_wavefronts_print_wavefronts_block(stream,
+        affine_wavefronts,s,MIN(s+display_block_wf,current_score));
   }
-  fprintf(stream,"\n");
-  // Compute min/max k
-  int max_k=0, min_k=0;
-  for (k=affine_wavefronts->max_k;k>=affine_wavefronts->min_k;k--) {
-    for (s=0;s<=current_score;++s) {
-      // Fetch wavefront
-      affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[s];
-      if (mwavefront != NULL) {
-        max_k = MAX(max_k,mwavefront->hi);
-        min_k = MIN(min_k,mwavefront->lo);
-      }
-      affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[s];
-      if (iwavefront != NULL) {
-        max_k = MAX(max_k,iwavefront->hi);
-        min_k = MIN(min_k,iwavefront->lo);
-      }
-      affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[s];
-      if (dwavefront != NULL) {
-        max_k = MAX(max_k,dwavefront->hi);
-        min_k = MIN(min_k,dwavefront->lo);
-      }
-    }
-  }
-  // Traverse all diagonals
-  for (k=max_k;k>=min_k;k--) {
-    fprintf(stream,"[k=%3d] ",k);
-    // Traverse all scores
-    for (s=0;s<=current_score;++s) {
-      // Fetch wavefront
-      affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[s];
-      affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[s];
-      affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[s];
-      AFFINE_WAVEFRONTS_PRINT_ELEMENT(mwavefront,k);
-      AFFINE_WAVEFRONTS_PRINT_ELEMENT(iwavefront,k);
-      AFFINE_WAVEFRONTS_PRINT_ELEMENT(dwavefront,k);
-      fprintf(stream," ");
-    }
-    fprintf(stream,"\n");
-  }
-  // Headers
-  fprintf(stream,"SCORE   ");
-  for (s=0;s<=current_score;++s) {
-    fprintf(stream,"     %2d      ",s);
-  }
-  fprintf(stream,"\n");
-}
-void affine_wavefronts_print_wavefronts_pretty(
-    FILE* const stream,
-    affine_wavefronts_t* const affine_wavefronts,
-    const int current_score) {
-  // Header
-  fprintf(stream,">[SCORE=%3d]\n",current_score);
-  int k, s;
-  awf_offset_t offset;
-  // Traverse all diagonals
-  for (k=affine_wavefronts->max_k;k>=affine_wavefronts->min_k;k--) {
-    // Header
-    fprintf(stream,"[k=%3d] ",k);
-    // Padding
-    awf_offset_t max_offset = affine_wavefronts_diagonal_length(affine_wavefronts,k);
-    if (max_offset <= 0) {
-      fprintf(stream,"\n");
-      continue;
-    }
-    offset = 0; // No table frame (initial conditions)
-    if (k > 0) {
-      max_offset += k;
-      for (;offset<k;++offset) fprintf(stream,"   ");
-    }
-    // Fetch offsets from 0 - score
-    int last_offset = -1;
-    for (s=0;s<=current_score;++s) {
-      // Fetch wavefront
-      affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[s];
-      if (mwavefront == NULL) continue;
-      if (k < mwavefront->lo || mwavefront->hi < k) continue;
-      // Fetch offset
-      awf_offset_t offsets_sub = mwavefront->offsets[k];
-      awf_offset_t offsets_sub_base = offsets_sub;
-#ifdef AFFINE_WAVEFRONT_DEBUG
-      offsets_sub_base = mwavefront->offsets_base[k];
-#endif
-      if (offsets_sub < 0) continue;
-      // Print offsets
-      if (last_offset == -1) {
-        while (offset < offsets_sub_base-1) {
-          if (offset == max_offset) fprintf(stream," | ");
-          fprintf(stream," * "); ++offset;
-        }
-      }
-      while (offset < offsets_sub) {
-        if (offset == max_offset) fprintf(stream," | ");
-        fprintf(stream,"%2d ",s); ++offset;
-      }
-      // Update last
-      last_offset = offsets_sub;
-    }
-    // Print unknowns
-    for (;offset<=max_offset;++offset) {
-      if (offset == max_offset) fprintf(stream," | ");
-      fprintf(stream," * ");
-    }
-    fprintf(stream,"\n");
-  }
-  fprintf(stream,"\n");
 }
 /*
  * Debug
