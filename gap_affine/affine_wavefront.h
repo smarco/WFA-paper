@@ -52,7 +52,6 @@
 /*
  * Constants
  */
-#define AFFINE_WAVEFRONT_OFFSET_NULL (-10)
 #define AFFINE_WAVEFRONT_K_NULL      (INT_MAX/2)
 
 /*
@@ -73,11 +72,14 @@
 
 #ifdef AFFINE_WAVEFRONT_W8
   typedef int8_t awf_offset_t;
+  #define AFFINE_WAVEFRONT_OFFSET_NULL (INT8_MIN/2)
 #else
   #ifdef AFFINE_WAVEFRONT_W16
     typedef int16_t awf_offset_t;
+    #define AFFINE_WAVEFRONT_OFFSET_NULL (INT16_MIN/2)
   #else // AFFINE_WAVEFRONT_W32
     typedef int32_t awf_offset_t;
+    #define AFFINE_WAVEFRONT_OFFSET_NULL (INT32_MIN/2)
   #endif
 #endif
 

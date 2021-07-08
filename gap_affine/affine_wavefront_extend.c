@@ -152,10 +152,12 @@ void affine_wavefronts_extend_mwavefront_compute_packed(
   awf_offset_t* const offsets = mwavefront->offsets;
   int k;
   for (k=mwavefront->lo;k<=mwavefront->hi;++k) {
-    // Fetch positions & offset
+    // Fetch offset & positions
     const awf_offset_t offset = offsets[k];
-    const int v = AFFINE_WAVEFRONT_V(k,offset);
-    const int h = AFFINE_WAVEFRONT_H(k,offset);
+    const uint32_t h = AFFINE_WAVEFRONT_H(k,offset); // Make unsigned to avoid checking negative
+    if (h >= text_length) continue;
+    const uint32_t v = AFFINE_WAVEFRONT_V(k,offset); // Make unsigned to avoid checking negative
+    if (v >= pattern_length) continue;
     // Fetch pattern/text blocks
     uint64_t* pattern_blocks = (uint64_t*)(pattern+v);
     uint64_t* text_blocks = (uint64_t*)(text+h);
@@ -181,32 +183,6 @@ void affine_wavefronts_extend_mwavefront_compute_packed(
     const int equal_chars = DIV_FLOOR(equal_right_bits,8);
     // Increment offset
     offsets[k] += equal_chars;
-  }
-  // DEBUG
-  affine_wavefronts_extend_mwavefront_epiloge(
-      affine_wavefronts,score,pattern_length,text_length);
-}
-void affine_wavefronts_extend_mwavefront_compute(
-    affine_wavefronts_t* const affine_wavefronts,
-    const char* const pattern,
-    const int pattern_length,
-    const char* const text,
-    const int text_length,
-    const int score) {
-  // Fetch m-wavefront
-  affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
-  if (mwavefront==NULL) return;
-  // Extend diagonally each wavefront point
-  awf_offset_t* const offsets = mwavefront->offsets;
-  int k;
-  for (k=mwavefront->lo;k<=mwavefront->hi;++k) {
-    // Exact extend
-    const awf_offset_t offset = offsets[k];
-    int v = AFFINE_WAVEFRONT_V(k,offset);
-    int h = AFFINE_WAVEFRONT_H(k,offset);
-    while (pattern[v++]==text[h++]) {
-      ++(offsets[k]);
-    }
   }
   // DEBUG
   affine_wavefronts_extend_mwavefront_epiloge(
