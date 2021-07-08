@@ -53,15 +53,7 @@ void affine_wavefronts_set_edit_table(
 /*
  * Display
  */
-void affine_wavefronts_print_wavefront(
-    FILE* const stream,
-    affine_wavefronts_t* const affine_wavefronts,
-    const int current_score);
 void affine_wavefronts_print_wavefronts(
-    FILE* const stream,
-    affine_wavefronts_t* const affine_wavefronts,
-    const int current_score);
-void affine_wavefronts_print_wavefronts_pretty(
     FILE* const stream,
     affine_wavefronts_t* const affine_wavefronts,
     const int current_score);

@@ -72,8 +72,8 @@ awf_offset_t backtrace_wavefront_trace_deletion_open_offset(
   if (score < 0) return AFFINE_WAVEFRONT_OFFSET_NULL;
   affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
   if (mwavefront != NULL &&
-      mwavefront->lo_base <= k+1 &&
-      k+1 <= mwavefront->hi_base) {
+      mwavefront->lo <= k+1 &&
+      k+1 <= mwavefront->hi) {
     return mwavefront->offsets[k+1];
   } else {
     return AFFINE_WAVEFRONT_OFFSET_NULL;
@@ -87,8 +87,8 @@ awf_offset_t backtrace_wavefront_trace_deletion_extend_offset(
   if (score < 0) return AFFINE_WAVEFRONT_OFFSET_NULL;
   affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[score];
   if (dwavefront != NULL &&
-      dwavefront->lo_base <= k+1 &&
-      k+1 <= dwavefront->hi_base) {
+      dwavefront->lo <= k+1 &&
+      k+1 <= dwavefront->hi) {
     return dwavefront->offsets[k+1];
   } else {
     return AFFINE_WAVEFRONT_OFFSET_NULL;
@@ -102,8 +102,8 @@ awf_offset_t backtrace_wavefront_trace_insertion_open_offset(
   if (score < 0) return AFFINE_WAVEFRONT_OFFSET_NULL;
   affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
   if (mwavefront != NULL &&
-      mwavefront->lo_base <= k-1 &&
-      k-1 <= mwavefront->hi_base) {
+      mwavefront->lo <= k-1 &&
+      k-1 <= mwavefront->hi) {
     return mwavefront->offsets[k-1] + 1;
   } else {
     return AFFINE_WAVEFRONT_OFFSET_NULL;
@@ -117,8 +117,8 @@ awf_offset_t backtrace_wavefront_trace_insertion_extend_offset(
   if (score < 0) return AFFINE_WAVEFRONT_OFFSET_NULL;
   affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[score];
   if (iwavefront != NULL &&
-      iwavefront->lo_base <= k-1 &&
-      k-1 <= iwavefront->hi_base) {
+      iwavefront->lo <= k-1 &&
+      k-1 <= iwavefront->hi) {
     return iwavefront->offsets[k-1] + 1;
   } else {
     return AFFINE_WAVEFRONT_OFFSET_NULL;
@@ -132,118 +132,16 @@ awf_offset_t backtrace_wavefront_trace_mismatch_offset(
   if (score < 0) return AFFINE_WAVEFRONT_OFFSET_NULL;
   affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
   if (mwavefront != NULL &&
-      mwavefront->lo_base <= k &&
-      k <= mwavefront->hi_base) {
+      mwavefront->lo <= k &&
+      k <= mwavefront->hi) {
     return mwavefront->offsets[k] + 1;
   } else {
     return AFFINE_WAVEFRONT_OFFSET_NULL;
   }
 }
 /*
- * Backtrace Paths Conditions
- */
-bool backtrace_wavefront_trace_deletion(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[score];
-  return (dwavefront != NULL &&
-          dwavefront->lo_base <= k &&
-          k <= dwavefront->hi_base &&
-          offset == dwavefront->offsets[k]);
-}
-bool backtrace_wavefront_trace_deletion_open(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
-  return (mwavefront != NULL &&
-          mwavefront->lo_base <= k+1 &&
-          k+1 <= mwavefront->hi_base &&
-          offset == mwavefront->offsets[k+1]);
-}
-bool backtrace_wavefront_trace_deletion_extend(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const dwavefront = affine_wavefronts->dwavefronts[score];
-  return (dwavefront != NULL &&
-          dwavefront->lo_base <= k+1 &&
-          k+1 <= dwavefront->hi_base &&
-          offset == dwavefront->offsets[k+1]);
-}
-bool backtrace_wavefront_trace_insertion(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[score];
-  return (iwavefront != NULL &&
-          iwavefront->lo_base <= k &&
-          k <= iwavefront->hi_base &&
-          offset == iwavefront->offsets[k]);
-}
-bool backtrace_wavefront_trace_insertion_open(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
-  return (mwavefront != NULL &&
-          mwavefront->lo_base <= k-1 &&
-          k-1 <= mwavefront->hi_base &&
-          offset == mwavefront->offsets[k-1]+1);
-}
-bool backtrace_wavefront_trace_insertion_extend(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const iwavefront = affine_wavefronts->iwavefronts[score];
-  return (iwavefront != NULL &&
-          iwavefront->lo_base <= k-1 &&
-          k-1 <= iwavefront->hi_base &&
-          offset == iwavefront->offsets[k-1]+1);
-}
-bool backtrace_wavefront_trace_mismatch(
-    affine_wavefronts_t* const affine_wavefronts,
-    const int score,
-    const int k,
-    const awf_offset_t offset) {
-  if (score < 0) return false;
-  affine_wavefront_t* const mwavefront = affine_wavefronts->mwavefronts[score];
-  return (mwavefront != NULL &&
-          mwavefront->lo_base <= k &&
-          k <= mwavefront->hi_base &&
-          offset == mwavefront->offsets[k]+1);
-}
-/*
  * Backtrace Operations
  */
-int affine_wavefronts_backtrace_compute_max_matches(
-    affine_wavefronts_t* const affine_wavefronts,
-    const char* const pattern,
-    const char* const text,
-    const int k,
-    awf_offset_t offset) {
-  // Locate position
-  int v = AFFINE_WAVEFRONT_V(k,offset);
-  int h = AFFINE_WAVEFRONT_H(k,offset);
-  // Check matches
-  int num_matches = 0;
-  while (v>0 && h>0 && pattern[--v] == text[--h]) ++num_matches;
-  // Return max-matches
-  return num_matches;
-}
 void affine_wavefronts_backtrace_matches__check(
     affine_wavefronts_t* const affine_wavefronts,
     const char* const pattern,
@@ -341,6 +239,10 @@ void affine_wavefronts_backtrace(
       affine_wavefronts_backtrace_matches__check(affine_wavefronts,
           pattern,text,k,offset,valid_location,num_matches,cigar);
       offset = max_all;
+      // Update coordinates
+      v = AFFINE_WAVEFRONT_V(k,offset);
+      h = AFFINE_WAVEFRONT_H(k,offset);
+      if (v <= 0 || h <= 0) break;
     }
     // Traceback Operation
     if (max_all == del_ext) {
