@@ -1,6 +1,6 @@
 # WFA
 
-** Important Notice. [WFA2-lib](https://github.com/smarco/WFA2-lib) has replaced the initial WFA version. ** We strongly recommend using [WFA2-lib](https://github.com/smarco/WFA2-lib) as it offers many more features, is more robust, and is actively being developed. This repository is left for academic and research purposes as its source code is simpler to understand and modify.
+**Important Notice. [WFA2-lib](https://github.com/smarco/WFA2-lib) has replaced the initial WFA version.** We strongly recommend using [WFA2-lib](https://github.com/smarco/WFA2-lib) as it offers many more features, is more robust, and is actively being developed. This repository is left for academic and research purposes as its source code is simpler to understand and modify.
 
 ## 1. INTRODUCTION
 
