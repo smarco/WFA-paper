@@ -330,7 +330,7 @@ void align_benchmark(const alg_algorithm_type alg_algorithm) {
   fprintf(stderr,"  => Time.Alignment    ");
   timer_print(stderr,&align_input.timer,&parameters.timer_global);
   // Print Stats
-  if (align_input.debug_flags!=0) {
+  if (parameters.check_correct || parameters.check_score || parameters.check_alignments) {
     const bool print_wf_stats = (alg_algorithm == alignment_gap_affine_wavefront);
     benchmark_print_stats(stderr,&align_input,print_wf_stats);
   }
@@ -345,7 +345,7 @@ void align_benchmark(const alg_algorithm_type alg_algorithm) {
  */
 void usage() {
   fprintf(stderr,
-      "USE: ./align_benchmark -i input                                      \n"
+      "USE: ./align_benchmark -a <algorithm> -i <input>                     \n"
       "      Options::                                                      \n"
       "        [Input]                                                      \n"
       "          --algorithm|a <algorithm>                                  \n"
@@ -533,7 +533,7 @@ void parse_arguments(int argc,char** argv) {
     fprintf(stderr,"Option --algorithm is required \n");
     exit(1);
   }
-  if (parameters.input==NULL) {
+  if (strcmp(parameters.algorithm,"test")!=0 && parameters.input==NULL) {
     fprintf(stderr,"Option --input is required \n");
     exit(1);
   }
