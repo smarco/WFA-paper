@@ -68,7 +68,7 @@ void affine_penalties_mzero(
     exit(1);
   }
   if (base_penalties->mismatch <= 0 ||
-      base_penalties->gap_opening <= 0 ||
+      base_penalties->gap_opening < 0 ||
       base_penalties->gap_extension <= 0) {
     fprintf(stderr,"Mismatch/Gap scores must be strictly positive (X=%d,O=%d,E=%d)\n",
         base_penalties->mismatch,base_penalties->gap_opening,base_penalties->gap_extension);

@@ -1,31 +1,22 @@
 # WFA
 
+** Important Notice. [WFA2-lib](https://github.com/smarco/WFA2-lib) has replaced the initial WFA version. ** We strongly recommend using [WFA2-lib](https://github.com/smarco/WFA2-lib) as it offers many more features, is more robust, and is actively being developed. This repository is left for academic and research purposes as its source code is simpler to understand and modify.
+
 ## 1. INTRODUCTION
 
 ### 1.1 What is WFA?
 
-The wavefront alignment (WFA) algorithm is an exact gap-affine algorithm that takes advantage of  
-homologous regions between the sequences to accelerate the alignment process. As opposed to 
-traditional dynamic programming algorithms that run in quadratic time, the WFA runs in time O(ns),
-proportional to the read length n and the alignment score s, using O(s^2) memory. Moreover, the WFA
-exhibits simple data dependencies that can be easily vectorized, even by the automatic features of 
-modern compilers, for different architectures, without the need to adapt the code.
+The wavefront alignment (WFA) algorithm is an exact gap-affine algorithm that takes advantage of homologous regions between the sequences to accelerate the alignment process. As opposed to traditional dynamic programming algorithms that run in quadratic time, the WFA runs in time O(ns), proportional to the read length n and the alignment score s, using O(s^2) memory. Moreover, the WFA exhibits simple data dependencies that can be easily vectorized, even by the automatic features of modern compilers, for different architectures, without the need to adapt the code.
 
-This library implements the WFA and the WFA-Adapt algorithms for gap-affine penalties. It also 
-provides support functions to display and verify the results. Moreover, it implements a benchmarking
-tool that serves to evaluate the performance of these two algorithms, together with other 
-high-performance alignment methods (checkout branch `benchmark`). The library can be executed   
-through the benchmarking tool for evaluation purposes or can be integrated into your code by calling
-the WFA functions.
+This library implements the WFA and the WFA-Adapt algorithms for gap-affine penalties. It also provides support functions to display and verify the results. Moreover, it implements a benchmarking tool that evaluates the performance of these two algorithms, together with other high-performance alignment methods (checkout branch `benchmark`). The library can be executed through the benchmarking tool for evaluation purposes or can be integrated into your code by calling the WFA functions.
 
-If you are interested in benchmarking WFA with other algorithms implemented or integrated into the
-WFA library, checkout branch `benchmark`.
+If you are interested in benchmarking WFA, and other algorithms implemented or integrated into the WFA library, checkout branch `benchmark`.
 
 ### 1.2 Getting started
 
-Note: We recomend using the GCC compiler
+Note: We recommend using the GCC compiler
 
-Clone GIT and compile
+Git clone and compile
 
 ```
 $> git clone https://github.com/smarco/WFA.git WFA
@@ -35,21 +26,17 @@ $> make clean all
 
 ## 3. PROGRAMMING WITH WFA
 
-Inside the folder `tools/examples/` the user can find two simples examples of how to program using 
-the WFA library. These examples aim to illustrate how to integrate the WFA code into any tool.
+Inside the folder `tools/examples/` the user can find two simples examples of how to program using the WFA library. These examples illustrate how to integrate the WFA code into any tool.
 
 ### 3.1 Simple WFA example
 
-This simple example illustrates how to align two sequences using the gap-affine WFA algorithm.
-First, we need to include the WFA alignment module.
+This simple example illustrates how to align two sequences using the gap-affine WFA algorithm. First, we need to include the WFA alignment module.
 
 ```C
 #include "gap_affine/affine_wavefront_align.h"
 ```
 
-Then, we prepare the text, pattern, penalties, and the memory-managed (MM) allocator. Note that the
-`affine_penalties` is configured in terms of penalties. For that reason, mismatch, gap-opening, and
-gap-extension are supposed to be positive values.  
+Then, we prepare the text, pattern, penalties, and the memory-managed (MM) allocator. Note that the `affine_penalties` is configured in terms of penalties. For that reason, mismatch, gap-opening, and gap-extension are supposed to be positive values.  
 
 ```C
   // Patter & Text
@@ -66,8 +53,7 @@ gap-extension are supposed to be positive values.
   };
 ```
 
-Afterwards, we initialize the `affine_wavefronts` object and we align the pattern against the text
-using the configured penalties.
+Afterwards, we initialize the `affine_wavefronts` object and align the pattern against the text using the configured penalties.
 
 ```C
   // Init Affine-WFA
@@ -78,9 +64,7 @@ using the configured penalties.
       affine_wavefronts,pattern,strlen(pattern),text,strlen(text));
 ```
 
-Finally, we can display the results of the alignment process. For example, the alignment score and
-the alignment CIGAR. For this purpose, the function `edit_cigar_score_gap_affine` computes the 
-CIGAR score, and the function `edit_cigar_print_pretty` prints pretty the CIGAR.
+Finally, we can display the results of the alignment process. For example, the alignment score and the alignment CIGAR. For this purpose, the function `edit_cigar_score_gap_affine` computes the CIGAR score, and the function `edit_cigar_print_pretty` prints pretty the CIGAR.
 
 ```C
   // Display alignment
@@ -106,10 +90,7 @@ $> ./wfa_basic
 
 ### 3.2 WFA-Adaptive example
 
-This example shows how to use the adaptive version of the WFA (i.e., WFA-Adaptive) to further improve
-the performance of the WFA algorithm by discarding alignment paths that are unlikely to reach the 
-optimal solution. This example is very similar to the previous one, we only have to include the 
-parameters `minimum-wavefront-length` and `maximum-difference-distance`. 
+This example shows how to use the adaptive version of the WFA (i.e., WFA-Adaptive) to further improve the performance of the WFA algorithm by discarding alignment paths that are unlikely to reach the optimal solution. This example is very similar to the previous one. We only have to include the parameters `minimum-wavefront-length` and `maximum-difference-distance`. 
  
  
 ```C
@@ -155,9 +136,7 @@ $> ./wfa_basic
 
 ### 3.3 Aligning sequences longer than 65.536 bases
 
-By default, the WFA uses 16-bit integers to represent the alignment wavefronts. For that reason,
-the maximum sequence length allowed is 2^16. In case you want to align longer sequences, you
-must adjust the definitions on `gap_affine/affine_wavefront.h` and select `AFFINE_WAVEFRONT_W32`.
+By default, the WFA uses 16-bit integers to represent the alignment wavefronts. For that reason, the maximum sequence length allowed is 2^16. If you want to align longer sequences, you must adjust the definitions on `gap_affine/affine_wavefront.h` and select `AFFINE_WAVEFRONT_W32`.
 
 ```
 /*
@@ -172,10 +151,7 @@ must adjust the definitions on `gap_affine/affine_wavefront.h` and select `AFFIN
 
 ### 4.1 Introduction to benchmarking WFA. Simple tests
 
-The WFA includes the benchmarking tool *align-benchmark* to test and compare the performance of 
-several pairwise alignment implementations, including the WFA and WFA-Adapt. This tool takes as 
-input a dataset containing pairs of sequences (i.e., pattern and text) to align. Patterns are 
-preceded by the '>' symbol and texts by the '<' symbol. Example:
+The WFA includes the benchmarking tool *align-benchmark* to test and compare the performance of several pairwise alignment implementations, including the WFA and WFA-Adapt. This tool takes as input a dataset containing pairs of sequences (i.e., pattern and text) to align. Patterns are preceded by the '>' symbol and texts by the '<' symbol. Example:
 
 ```
 >ATTGGAAAATAGGATTGGGGTTTGTTTATATTTGGGTTGAGGGATGTCCCACCTTCGTCGTCCTTACGTTTCCGGAAGGGAGTGGTTAGCTCGAAGCCCA
@@ -185,17 +161,13 @@ preceded by the '>' symbol and texts by the '<' symbol. Example:
 [...]
 ```
 
-You can either generate a custom dataset of your own, or use the *generate-dataset* tool to generate
-a random dataset. For example, the following command generates a dataset named 'sample.dataset.seq' 
-of 5M pairs of 100 bases with an alignment error of 5% (i.e., 5 mismatches, insertions or deletions 
-per alignment).
+You can either generate a custom dataset of your own, or use the *generate-dataset* tool to generate a random dataset. For example, the following command generates a dataset named 'sample.dataset.seq' of 5M pairs of 100 bases with an alignment error of 5% (i.e., 5 mismatches, insertions or deletions per alignment).
 
 ```
 $> ./bin/generate_dataset -n 5000000 -l 100 -e 0.05 -o sample.dataset.seq
 ```
 
-Once you have the dataset ready, you can run the *align-benchmark* tool to benchmark the performance 
-of a specific pairwise alignment method. For example, the WFA algorithm:
+Once you have the dataset ready, you can run the *align-benchmark* tool to benchmark the performance of a specific pairwise alignment method. For example, the WFA algorithm:
 
 ```
 $> ./bin/align_benchmark -i sample.dataset.seq -a gap-affine-wfa
@@ -209,10 +181,7 @@ $> ./bin/align_benchmark -i sample.dataset.seq -a gap-affine-wfa
   => Time.Alignment      28.20 s  ( 64.20 %) (    5 Mcalls,   5.64 us/call {min438ns,Max47.05ms})
 ```
 
-The *align-benchmark* tool will finish and report overall benchmark time (including reading the 
-input, setup, checking, etc.) and the time taken by the algorithm (i.e., *Time.Alignment*). If you 
-want to measure the accuracy of the alignment method, you can add the option `--check` and all the
-alignments will be verified. 
+The *align-benchmark* tool will finish and report overall benchmark time (including reading the input, setup, checking, etc.) and the time taken by the algorithm (i.e., *Time.Alignment*). If you want to measure the accuracy of the alignment method, you can add the option `--check` and all the alignments will be verified. 
 
 ```
 $> ./bin/align_benchmark -i sample.dataset.seq -a gap-affine-wfa --check
@@ -237,10 +206,7 @@ $> ./bin/align_benchmark -i sample.dataset.seq -a gap-affine-wfa --check
 
 ```
 
-Using the `--check` option, the tool will report *Alignments.Correct* (i.e., total alignments that 
-are correct, not necessarily optimal), and *Score.Correct* (i.e., total alignments that have the 
-optimal score). Note that the overall benchmark time will increase due to the overhead introduced  
-by the checking routine, however the *Time.Alignment* should remain the same.
+Using the `--check` option, the tool will report *Alignments.Correct* (i.e., total alignments that are correct, not necessarily optimal), and *Score.Correct* (i.e., total alignments that have the optimal score). Note that the overall benchmark time will increase due to the overhead introduced by the checking routine, however the *Time.Alignment* should remain the same.
 
 ### 4.2 Generate-dataset tool (Command-line and Options)
 
